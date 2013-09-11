@@ -1,0 +1,36 @@
+#    {{ pillar['file_header'] }}
+#    Company: {{ pillar['company'] }}
+#    sysadmin: {{ pillar['sysadmin'] }} <{{ pillar['sysadmin_email'] }}>
+#
+
+## CIS 6.3.4 Set Lockout for Failed Password Attempts (Not Scored)
+auth        required      pam_env.so
+auth        required      pam_faillock.so preauth audit silent deny=5 unlock_time=900
+auth        [success=1 default=bad]       pam_unix.so
+auth        [default=die]         pam_faillock.so authfail audit deny=5 unlock_time=900
+auth        sufficient    pam_faillock.so authsucc audit deny=5 unlock_time=900
+auth        required      pam_deny.so
+auth        required      pam_deny.so
+
+account     required      pam_unix.so
+account     sufficient    pam_localuser.so
+account     sufficient    pam_succeed_if.so uid < 500 quiet
+account     required      pam_permit.so
+
+## CIS 6.3.2 Set Password Creation Requirement Parameters Using pam_cracklib
+password    required      pam_cracklib.so try_first_pass retry=3 minlen=14,dcredit=-1,ucredit=-1,ocredit=-1 lcredit=-1
+
+## CIS 6.3.3 Set Strong Password Creation Policy Using pam_passwdqc
+password    requisite     pam_passwdqc.so min=disabled,disabled,16,12,8
+
+## CIS 6.3.6 Limit Password Reuse (Scored)
+password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=5
+
+password    required      pam_deny.so
+
+session     optional      pam_keyinit.so revoke
+session     required      pam_limits.so
+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+session     required      pam_unix.so
+
+
