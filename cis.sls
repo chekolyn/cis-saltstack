@@ -1,8 +1,10 @@
 {% if grains['os_family'] == 'RedHat' and grains['osrelease'].startswith('6') %}
 
 ## Copy CIS scripts:
-/opt/cis/scripts:
-  file.recurse:
+copy_scripts:
+  file:
+    - recurse
+    - name: /opt/cis/scripts  
     - source: salt://cis/scripts
     - file_mode: 755
     - dir_mode: 700
@@ -864,6 +866,8 @@ pam_hash_test:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/6.3.1.all.pam.password.hashing.sh
+    - watch:
+      - file.recourse: /opt/cis/scripts         
 
 ## 6.3.2 Set Password Creation Requirement Parameters Using pam_cracklib (Scored)
 ## 6.3.3 Set Strong Password Creation Policy Using pam_passwdqc (Scored)
@@ -934,6 +938,8 @@ system_accounts_test:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/7.2.disable.system.accounts.sh
+    - watch:
+      - file.recourse: /opt/cis/scripts
 
 ## 7.3 Set Default Group for root Account (Scored)
 root_primary_group_test:  
@@ -943,7 +949,9 @@ root_primary_group_test:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/7.3.default.group.for.root.account.sh
-         
+    - watch:
+      - file.recourse: /opt/cis/scripts
+               
 ## 7.4 Set Default umask for Users (Scored)
 umask_bashrc_sed:
   file:
@@ -1020,7 +1028,9 @@ word_writable_files:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/9.1.10.find.world.writable.files.sh
-         
+    - watch:
+      - file.recourse: /opt/cis/scripts
+               
 ## 9.1.11 Find Un-owned Files and Directories (Scored)
 unowned_files:  
   cmd.run:
@@ -1029,7 +1039,9 @@ unowned_files:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/9.1.11.find.unowned.files.and.directories.sh             
-
+    - watch:
+      - file.recourse: /opt/cis/scripts
+      
 ## 9.1.12 Find Un-grouped Files and Directories (Scored)
 ungroup_files:  
   cmd.run:
@@ -1038,7 +1050,9 @@ ungroup_files:
     - stateful: True
     - required:
          -file: /opt/cis/scripts/9.1.12.find.ungrouped.files.and.directories.sh
-         
+    - watch:
+      - file.recourse: /opt/cis/scripts
+               
 ## 9.1.13 Find SUID System Executables (Not Scored)
 ## 9.1.14 Find SGID System Executables (Not Scored)
 ## Not implemented: Requires manual review
