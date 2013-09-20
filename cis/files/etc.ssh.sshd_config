@@ -22,10 +22,6 @@ ClientAliveCountMax 0
 # Use either allow or deny to restrict who can SSH into the system per CIS
 # Control 6.2.13. This may need to be done on a system-by-system basis, using
 # user@system format allowing you one global sshd_config file (like sudoers).
-# AllowUsers  <userlist>
-# AllowGroups <grouplist>
-# DenyUsers   <userlist>
-# DenyGroups  <grouplist>
 # Below all system accounts included with a full install have been placed on
 # the deny list (as system accounts should never perform remote interactive logins.
 

@@ -51,6 +51,60 @@ cis_removed_pkgs:
       - squid
       - net-snmp
 
+## 1.1.1 Create Separate Partition for /tmp (Scored)
+## 1.1.5 Create Separate Partition for /var (Scored)
+## 1.1.7 Create Separate Partition for /var/log (Scored)
+## 1.1.8 Create Separate Partition for /var/log/audit (Scored)
+## 1.1.9 Create Separate Partition for /home (Scored)
+## Should be done while creating the system
+
+## 1.1.2 Set nodev option for /tmp Partition (Scored)
+## 1.1.3 Set nosuid option for /tmp Partition (Scored)
+## 1.1.4 Set noexec option for /tmp Partition (Scored)
+## 1.1.10 Add nodev Option to /home (Scored)
+## 1.1.14 Add nodev Option to /dev/shm Partition (Scored)
+## 1.1.15 Add nosuid Option to /dev/shm Partition (Scored)
+## 1.1.16 Add noexec Option to /dev/shm Partition (Scored)
+{% for device, fsoptions in [ ('/tmp', 'nodev,noexec,nosuid' ), ('/var', 'nodev'),
+('/var/log', 'nodev,noexec,nosuid'), ('/var/log/audit', 'nodev,noexec,nosuid'),
+('/home', 'nodev'), ('/dev/shm', 'defaults,nodev,noexec,nosuid') ]  %}
+
+{% set dev_grep = salt['cmd.run']("grep ' " + device + " ' /etc/fstab | grep -c '" + fsoptions + "'") %}
+# Current_dev = {{device}}
+# dev_grep= {{dev_grep}}
+{% if dev_grep  == '0' %}
+{% set command_opts = "grep ' " + device + " ' /etc/fstab  | awk '{print $4}'" %}
+{% set current_opts = salt['cmd.run']("grep ' " + device + " ' /etc/fstab  | awk '{print $4}'")  %}
+# command_opts = {{command_opts}}
+# current_opts = {{current_opts}}
+
+ftab_{{device}}:
+  file:
+    - sed
+    - name: /etc/fstab
+    - before: '{{current_opts}}'
+    - after: '{{fsoptions}}'
+    - limit: '{{device}}'
+{% endif %}
+{% endfor %}
+
+## 1.1.6 Bind Mount the /var/tmp directory to /tmp (Scored)
+# Add it to fstab:
+{% if 'bind' not in salt['cmd.run']('grep -e "^/tmp" /etc/fstab | grep /var/tmp') %}
+append_var_tmp:
+  file:
+    - append
+    - name: /etc/fstab
+    - text: '/tmp /var/tmp none bind 0 0'
+{% endif %}
+
+# Mount it if not currently mounted:
+{% set drive_mounted = salt['cmd.run']('mount | grep -e "^/tmp" | grep /var/tmp') %}
+{% if drive_mounted != '/tmp on /var/tmp type none (rw,bind)' %}
+mount_var_tmp:
+  cmd.run:
+    - name: 'mount --bind /tmp /var/tmp'
+{% endif%}
 
 ## 1.2.2 Verify Red Hat GPG Key is Installed
 #gpg_check:
@@ -140,7 +194,40 @@ grub_selinux:
     - group: root 
     
 ## 1.5.3 Set Boot Loader Password
-## PENDING
+# First check for md5 password in pillar
+{% if 'grub_change_password' in pillar and pillar['grub_change_password'] and 'grub_md5_password' in pillar and pillar['grub_md5_password'].startswith('$1') %}
+  {% set grub_config = '/boot/grub/grub.conf' %}
+  {% set grub_test = salt['cmd.run']("grep '^\s*password' " + grub_config )  %}
+  ## this is grub_test = {{grub_test}}
+
+  # Check for desired password line:
+  {% if grub_test != "password --md5 " + pillar['grub_md5_password'] %}
+    {% set grub_pass_count = salt['cmd.run']("grep -c '^\s*password' " + grub_config ) %}
+    
+    # Check if password doesn't exist in grub.conf
+    {% if grub_pass_count == '0' %}
+    {% set grub_pass_line = "password --md5 " + pillar['grub_md5_password'] %}
+grub_manual_sed:
+  cmd.run:
+    ## Note: we need the \\n to escape the newline in the template
+    ## only one backslash needed in a real command line.
+    - name: "sed -i '0,/^title/s||{{grub_pass_line}}\\n&|' {{grub_config}}"
+
+    {% else %}
+{{grub_config}}:
+  file.sed:
+  - before: 'password.*'
+  - after: "password --md5 {{pillar['grub_md5_password']}}"
+  - limit: '^\s*password'
+  - backup: ''
+     
+    {% endif %}
+  
+  # endif of grub_test
+  {% endif %}
+
+# endif of pillar['grub_md5_password']
+{% endif %}
 
 ## 1.5.4 Require Authentication for Single-User Mode
 ## 1.5.5 Disable Interactive Boot
@@ -169,6 +256,12 @@ sysconfig_init_prompt:
     - user: root
     - group: root
     - template: jinja
+    
+fs.suid_dumpable:
+  sysctl:
+    - present
+    - value: 0
+
 
 ## 1.6.2 Configure ExecShield 
 kernel.exec-shield:
@@ -180,7 +273,12 @@ kernel.exec-shield:
 kernel.randomize_va_space:
   sysctl:
     - present
-    - value: 2  
+    - value: 2
+    
+/etc/sysconfig/init:
+  file:
+    - append
+    - text: 'umask 027'
 
 ## 1.7 Use the Latest OS Release (Not Scored)
 

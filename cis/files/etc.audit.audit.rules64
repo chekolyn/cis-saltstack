@@ -94,6 +94,13 @@
 -w /sbin/modprobe -p x -k modules
 -a always,exit arch=b64 -S init_module -S delete_module -k modules
 
+# audit_network_modifications
+-a exit,always -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications
+-w /etc/issue -p wa -k audit_network_modifications
+-w /etc/issue.net -p wa -k audit_network_modifications
+-w /etc/hosts -p wa -k audit_network_modifications
+-w /etc/sysconfig/network -p wa -k audit_network_modifications
+
 -e 2
 
 ## (End of CIS compliance settings)
