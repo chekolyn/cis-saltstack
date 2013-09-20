@@ -1,7 +1,7 @@
 {% if grains['os_family'] == 'RedHat' and grains['osrelease'].startswith('6') %}
 
 ## Copy CIS scripts:
-copy_scripts:
+cis_copy_scripts:
   file:
     - recurse
     - name: /opt/cis/scripts  
