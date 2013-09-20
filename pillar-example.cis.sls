@@ -3,6 +3,11 @@ sysadmin: Your Name
 sysadmin_email: email@example.com
 file_header: "** THIS FILE IS MANAGED BY SALT; CHANGES WILL BE OVERWRITTEN **"
 
+grub_change_password: yes      
+# Default password: "password"; please change this
+# look at 1.5.3 Set Boot Loader Password  page 45
+grub_md5_password: $1$zH9/LuR8$mSaGkvtLcwf7U6iy/KudL1
+
 ntp_servers:
   primary: ntp1-server.example.com
   secondary: ntp2-server.example.com
