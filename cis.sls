@@ -398,6 +398,7 @@ ntpd:
     - sig: ntpd
     - watch:
       - file: /etc/ntp.conf
+      - file: /etc/sysconfig/ntpd
       
 # Manage the ntp config file      
 /etc/ntp.conf:
@@ -406,6 +407,16 @@ ntpd:
     - source: salt://cis/files/etc.ntp.conf
     - mode: 644
     - template: jinja 
+    
+# Make sure that the daemon is running as an unprivileged user:
+{% if salt['cmd.run']('grep "^OPTIONS" /etc/sysconfig/ntpd') != 'OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"' %}
+/etc/sysconfig/ntpd:
+  file.sed:
+  - before: '^OPTIONS.*'
+  - after: 'OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"'
+  - limit: '^OPTIONS'
+  
+{% endif %}    
 
 ## 3.7 Remove LDAP 
 ## Up in package management
