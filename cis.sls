@@ -406,17 +406,15 @@ ntpd:
     - managed       
     - source: salt://cis/files/etc.ntp.conf
     - mode: 644
-    - template: jinja 
-    
-# Make sure that the daemon is running as an unprivileged user:
-{% if salt['cmd.run']('grep "^OPTIONS" /etc/sysconfig/ntpd') != 'OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"' %}
+    - template: jinja
+ 
+# Make sure that the daemon is running as an unprivileged user:    
 /etc/sysconfig/ntpd:
-  file.sed:
-  - before: '^OPTIONS.*'
-  - after: 'OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"'
-  - limit: '^OPTIONS'
-  
-{% endif %}    
+  file:                               
+    - managed       
+    - source: salt://cis/files/etc.sysconfig.ntpd
+    - mode: 644
+    - template: jinja     
 
 ## 3.7 Remove LDAP 
 ## Up in package management
