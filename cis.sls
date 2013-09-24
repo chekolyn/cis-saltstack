@@ -387,7 +387,7 @@ cups:
 ## 3.5 Remove DHCP Server 
 ## Up in package management
 
-## 3.6 Configure Network Time Protocol (NTP)
+## 3.6 Configure Network Time Protocol (NTP)    
 ntpd:
   service:
     - running
@@ -396,6 +396,16 @@ ntpd:
     - name: ntpd
     - enable: True
     - sig: ntpd
+    - watch:
+      - file: /etc/ntp.conf
+      
+# Manage the ntp config file      
+/etc/ntp.conf:
+  file:                               
+    - managed       
+    - source: salt://cis/files/etc.ntp.conf
+    - mode: 644
+    - template: jinja 
 
 ## 3.7 Remove LDAP 
 ## Up in package management
