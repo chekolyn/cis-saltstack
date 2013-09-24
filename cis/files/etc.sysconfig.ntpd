@@ -1,0 +1,6 @@
+#    {{ pillar['file_header'] }}
+#    Company: {{ pillar['company'] }}
+#    sysadmin: {{ pillar['sysadmin'] }} <{{ pillar['sysadmin_email'] }}>
+#
+# Drop root to id 'ntp:ntp' by default.
+OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"
