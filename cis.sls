@@ -540,7 +540,6 @@ net.ipv4.tcp_syncookies:
 
 ## 4.4 Disable IPv6    
 ## 4.4.1.1 Disable IPv6 Router Advertisements
-{% if pillar['enable_ipv6'] == 'yes' %}
 
 net.ipv6.conf.all.accept_ra:
   sysctl:
@@ -551,7 +550,7 @@ net.ipv6.conf.default.accept_ra:
   sysctl:
     - present
     - value: 0
-    
+
 ## 4.4.1.2 Disable IPv6 Redirect Acceptance (Not Scored)
 net.ipv6.conf.all.accept_redirects:
   sysctl:
@@ -562,19 +561,53 @@ net.ipv6.conf.default.accept_redirects:
   sysctl:
     - present
     - value: 0
-    
-{% else %}
 
 ## 4.4.2 Disable IPv6 
-/etc/sysconfig/network:
+# disable ipv6 support in the kernel -- from Red Hat:
+net.ipv6.conf.all.disable_ipv6:
+  sysctl:
+    - present
+    - value: {{ '0' if pillar['enable_ipv6']  else '1' }}
+    
+net.ipv6.conf.default.disable_ipv6:
+  sysctl:
+    - present
+    - value: {{ '0' if pillar['enable_ipv6'] else '1' }}
+    
+# from CIS
+{% if pillar['enable_ipv6'] %}
+ipv6_sysconfig_network_enable:
   file:
-    - append
-    - text: 'NETWORKING_IPV6=no'
+    - sed
+    - name: /etc/sysconfig/network
+    - before: '^NETWORKING_IPV6=.*'
+    - after: ''
+    - options: '-r -e "/^NETWORKING_IPV6.*/d"'
 
-/etc/sysconfig/network:
+{% else %}
+ipv6_syconfig_network_disable: 
   file:
     - append
-    - text: 'IPV6INIT=no'
+    - name: /etc/sysconfig/network 
+    - text: "NETWORKING_IPV6=no"
+{% endif %}
+
+{% if pillar['enable_ipv6'] %}
+ipv6_sysconfig_network_enable2:
+  file:
+    - sed
+    - name: /etc/sysconfig/network
+    - before: '^IPV6INIT.*'
+    - after: ''
+    - options: '-r -e "/^IPV6INIT.*/d"'
+
+{% else %}
+ipv6_syconfig_network_disable2: 
+  file:
+    - append
+    - name: /etc/sysconfig/network 
+    - text: "IPV6INIT=no"
+{% endif %}
 
 /etc/modprobe.d/ipv6.conf:
   file:
@@ -582,7 +615,6 @@ net.ipv6.conf.default.accept_redirects:
     - source: salt://cis/files/etc.modprobe.d.ipv6.conf
     - mode: 644
     - template: jinja
-{% endif %}
 
 ## 4.5.1 Install TCP Wrappers 
 ## Up in package management 
@@ -671,7 +703,8 @@ rsyslog:
     
 ## 5.1.4 Create and Set Permissions on rsyslog Log Files
 ## Currently using pillar to identify all the log files:
-{% for file in ['kern.log', 'messages', 'daemon.log', 'syslog', 'unused', 'secure', 'mailog', 'cron', 'spooler', 'boot.log'] %}
+{% for file in ['kern.log', 'messages', 'daemon.log', 'syslog',
+'unused', 'secure', 'mailog', 'cron', 'spooler', 'boot.log'] %}
 /var/log/{{file}}:
   file:
     - managed
@@ -742,11 +775,13 @@ auditd:
     - mode: 0640
     - template: jinja    
   
-
-
-
 ## 5.3 Configure logrotate (Not Scored)
-## TODO
+/etc/logrotate.d/syslog:
+  file:
+    - managed
+    - source: salt://cis/files/etc.logrotate.d.syslog
+    - mode: 644
+    - template: jinja
 
 #### 6 System Access, Authentication and Authorization
 ## 6.1.1 Enable anacron Daemon (Scored)

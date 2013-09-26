@@ -1,0 +1,18 @@
+#    {{ pillar['file_header'] }}
+#    Company: {{ pillar['company'] }}
+#    sysadmin: {{ pillar['sysadmin'] }} <{{ pillar['sysadmin_email'] }}>
+#
+## CIS 5.3 Configure logrotate (Not Scored)
+
+/var/log/cron
+/var/log/maillog
+/var/log/messages
+/var/log/secure
+/var/log/spooler
+/var/log/boot.log
+{
+    sharedscripts
+    postrotate
+       /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
