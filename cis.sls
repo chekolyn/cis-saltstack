@@ -197,18 +197,20 @@ grub_selinux:
     
 ## 1.5.3 Set Boot Loader Password
 # First check for md5 password in pillar
-{% if 'grub_change_password' in pillar and pillar['grub_change_password'] and 'grub_md5_password' in pillar and pillar['grub_md5_password'].startswith('$1') %}
+{% if 'grub_change_password' in pillar and pillar['grub_change_password'] and
+'grub_md5_password' in pillar and pillar['grub_md5_password'].startswith('$1') %}
+
   {% set grub_config = '/boot/grub/grub.conf' %}
-  {% set grub_test = salt['cmd.run']("grep '^\s*password' " + grub_config )  %}
+  {% set grub_test = salt['cmd.run']("grep ' password --md5' " + grub_config )  %}
   ## this is grub_test = {{grub_test}}
 
   # Check for desired password line:
-  {% if grub_test != "password --md5 " + pillar['grub_md5_password'] %}
-    {% set grub_pass_count = salt['cmd.run']("grep -c '^\s*password' " + grub_config ) %}
+  {% if grub_test != " password --md5 " + pillar['grub_md5_password'] %}
+    {% set grub_pass_count = salt['cmd.run']("grep -c ' password --md5' " + grub_config ) %}
     
     # Check if password doesn't exist in grub.conf
     {% if grub_pass_count == '0' %}
-    {% set grub_pass_line = "password --md5 " + pillar['grub_md5_password'] %}
+    {% set grub_pass_line = " password --md5 " + pillar['grub_md5_password'] %}
 grub_manual_sed:
   cmd.run:
     ## Note: we need the \\n to escape the newline in the template
@@ -220,7 +222,7 @@ grub_manual_sed:
   file.sed:
   - before: 'password.*'
   - after: "password --md5 {{pillar['grub_md5_password']}}"
-  - limit: '^\s*password'
+  - limit: "^ password"
   - backup: ''
      
     {% endif %}
