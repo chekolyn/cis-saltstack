@@ -109,33 +109,15 @@ mount_var_tmp:
 {% endif%}
 
 ## 1.2.2 Verify Red Hat GPG Key is Installed
-#gpg_check:
-#  cmd.run:
-#    - name: /opt/cis/scripts/rhel.1.2.2.gpg-keys.sh
-#    - cwd: /
-#    - stateful: True
-
-#Run only if myscript changed something:
-#  cmd.wait:
-#    - name: 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-legacy-release'
-#    - cwd: /
-#    - watch:
-#        - cmd: gpg_check
-#  cmd.wait:
-#    - name: 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-legacy-former'
-#    - cwd: /
-#    - watch:
-#        - cmd: gpg_check
-#  cmd.wait:
-#    - name: 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release'
-#    - cwd: /
-#    - watch:
-#        - cmd: gpg_check
-#  cmd.wait:
-#    - name: 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-legacy-rhx'
-#    - cwd: /
-#    - watch:
-#        - cmd: gpg_check       
+gpg_check:
+  cmd.run:
+    - name: /opt/cis/scripts/1.2.2.gpg-keys.sh
+    - cwd: /
+    - stateful: True
+    - required:
+         -file: /opt/cis/scripts/1.2.2.gpg-keys.sh
+    - watch:
+      - file.recourse: /opt/cis/scripts     
         
 ## 1.2.3 Verify that gpgcheck is Globally Activated
 gpgcheck_sed:
