@@ -10,6 +10,7 @@ RESPONSE=$(ps -eZ | egrep "initrc" | egrep -vw "tr|ps|egrep|bash|awk|salt-minion
 
 if [ "$RESPONSE" != '' ]; then
   CHANGED="yes"
+  echo "These are the unconfined daemons: "
   echo $RESPONSE
   COMMENT="--WARNING-- there are some unconfined daemons"  
 else

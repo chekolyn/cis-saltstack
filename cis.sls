@@ -151,7 +151,7 @@ rhnsd:
     - minute: 0
     - hour: 5
     
-## 1.4.1 Enable SELinux in /etc/grub.conf 
+## 1.4.1 Enable SELinux in /etc/grub.conf
 grub_selinux:
   file:
     - sed
@@ -166,7 +166,11 @@ grub_selinux:
     - managed
     - source: salt://cis/files/etc.selinux.config
     - mode: 644
-    - template: jinja   
+    - template: jinja
+    
+# Make sure that SELinux is actually running:
+enforcing:
+  selinux.mode
     
 ## 1.4.4 Remove SETroubleshoot
 ## 1.4.5 Remove MCS Translation Service
