@@ -135,6 +135,12 @@ rhnsd:
     - enable: False
     - sig: rhnsd
     
+## 1.2.5 Obtain Software Package Updates with yum (Not Implemented)
+## 1.2.6 Verify Package Integrity Using RPM 
+## Will not implement; there are some isues with the proposed script
+## Issues with prelink and rpm verify 
+## https://bugzilla.redhat.com/show_bug.cgi?id=204448
+    
 ## 1.3.1 Install AIDE
 ## Up in package management
 
@@ -167,6 +173,15 @@ grub_selinux:
 ## Up in package management
 
 ## 1.4.6 Check for Unconfined Daemons (on audit)
+unconfied_daemon_check:
+  cmd.run:
+    - name: /opt/cis/scripts/1.4.6.check.for.unconfined.daemons.sh
+    - cwd: /
+    - stateful: True
+    - required:
+         -file: /opt/cis/scripts/1.4.6.check.for.unconfined.daemons.sh
+    - watch:
+      - file.recourse: /opt/cis/scripts  
 
 ## 1.5.1 Set User/Group Owner on /etc/grub.conf
 ## 1.5.2 Set Permissions on /etc/grub.conf
@@ -267,6 +282,7 @@ kernel.randomize_va_space:
     - text: 'umask 027'
 
 ## 1.7 Use the Latest OS Release (Not Scored)
+## Not Implemented
 
 #### 2.1 Remove Legacy Services ####
 ## 2.1.1 Remove telnet-server
