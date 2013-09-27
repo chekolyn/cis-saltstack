@@ -171,8 +171,8 @@ grub_selinux:
 # Install salt pkg dependency for selinux state:
 policycoreutils-python:
   pkg.installed 
-# Make sure that SELinux is actually running: 
   
+# Make sure that SELinux is actually running:   
 cis_selinux:
     selinux:
       - mode

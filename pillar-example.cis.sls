@@ -45,5 +45,5 @@ enable_ipv6: no
 
 ## 4.5.2 Create /etc/hosts.allow
 ## Opening to all local private networks by default
-hosts_allow_subnet: "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16"
+hosts_allow_subnet: "10.0.0.0/255.0.0.0, 172.16.0.0/255.240.0.0, 192.168.0.0/255.255.0.0"
 
