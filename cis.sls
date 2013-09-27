@@ -168,10 +168,11 @@ grub_selinux:
     - mode: 644
     - template: jinja
     
-# Make sure that SELinux is actually running: 
+# Install salt pkg dependency for selinux state:
 policycoreutils-python:
   pkg.installed 
-
+# Make sure that SELinux is actually running: 
+  
 cis_selinux:
     selinux:
       - mode
