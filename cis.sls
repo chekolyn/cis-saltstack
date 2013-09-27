@@ -168,10 +168,17 @@ grub_selinux:
     - mode: 644
     - template: jinja
     
-# Make sure that SELinux is actually running:
-enforcing:
-  selinux.mode
-    
+# Make sure that SELinux is actually running: 
+policycoreutils-python:
+  pkg.installed 
+
+cis_selinux:
+    selinux:
+      - mode
+      - name: enforcing
+      - require:
+        - pkg: policycoreutils-python
+
 ## 1.4.4 Remove SETroubleshoot
 ## 1.4.5 Remove MCS Translation Service
 ## Up in package management
