@@ -735,7 +735,7 @@ rsyslog:
 ## 5.2.1.1 Configure Audit Log Storage Size
 ## 5.2.1.2 Disable System on Audit Log Full 
 ## 5.2.1.3 Keep All Auditing Information 
-/etc/audit/audit.conf:
+/etc/audit/auditd.conf:
   file:                               
     - managed       
     - source: salt://cis/files/etc.audit.auditd.conf
@@ -749,13 +749,13 @@ auditd:
   service:
     - running
     - required:
-      - file: /etc/audit/audit.conf
+      - file: /etc/audit/auditd.conf
       - file: /etc/audit/audit.rules
     - name: auditd
     - enable: True
     - sig: auditd
     - watch:
-      - file: /etc/audit/audit.conf
+      - file: /etc/audit/auditd.conf
       - file: /etc/audit/audit.rules
 
 ## 5.2.3 Enable Auditing for Processes That Start Prior to auditd (Scored)
