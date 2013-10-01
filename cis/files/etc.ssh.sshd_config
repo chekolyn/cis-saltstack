@@ -27,7 +27,7 @@ ClientAliveCountMax 0
 
 DenyUsers root,bin,daemon,adm,lp,mail,uucp,operator,games,gopher,ftp,nobody,dbus,rpc,usbmuxd,avahi-autiipd,hsqldb,abrt,pegasus,cimsrvr,oprofile,vcsa,rtkit,apache,saslauth,rpcuser,nfsnobody,qpidd,postfix,haldaemon,ricci,ntp,qemu,memcached,radvd,avahi,pulse,gdm,tomcat,webalizer,piranha,sshd,luci,dovecot,dovenull,tcpdump
 
-Banner /etc/issue.net
+Banner /etc/issue
 
 SyslogFacility AUTHPRIV
 PasswordAuthentication yes

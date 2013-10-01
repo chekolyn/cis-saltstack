@@ -914,13 +914,7 @@ sshd:
 ## 6.2.14 Set SSH Banner (Scored)
 ## The Banner parameter specifies a file whose contents must be sent to the remote user
 ## before authentication is permitted. By default, no banner is displayed.    
-/etc/issue.net:
-  file:
-    - managed
-    - source: salt://cis/files/etc.issue.net
-    - mode: 644
-    - user: root
-    - group: root
+## /etc/issue file management at 8.1 
 
 #### 6.3 Configure PAM
 ## 6.3.1 Upgrade Password Hashing Algorithm to SHA-512 (Scored)
