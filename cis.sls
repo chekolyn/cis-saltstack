@@ -11,7 +11,7 @@ cis_copy_scripts:
     - template: jinja
     - clean: True
 
-## Packages Management:
+## Package Management:
 cis_install_pkgs:
   pkg.installed:
     - pkgs:
@@ -25,33 +25,18 @@ cis_install_pkgs:
 cis_removed_pkgs:
   pkg.purged:
     - pkgs:
-      - xinetd
-      - telnet
-      - telnet-server
-      - krb5-workstation
-      - rsh-server
-      - rsh
-      - tftp-server
-      - sendmail
-      - dhcp
-      - gnome-user-share
-      - isdn4k-utils
-      - irda-utils
-      - talk
-      - ipsec-tools
-      - pam_ccreds
-      - openswan
-      - sysklogd
-      - openldap-servers
-      - openldap-clients
-      - setroubleshoot
-      - bind
-      - vsftpd
-      - httpd
-      - dovecot
-      - samba
-      - squid
-      - net-snmp
+      {% for pkg in ['xinetd', 'telnet', 'telnet-server', 'krb5-workstation',
+      'rsh-server', 'rsh', 'tftp-server', 'sendmail', 'dhcp', 'gnome-user-share',
+      'isdn4k-utils', 'irda-utils', 'talk', 'ipsec-tools', 'pam_ccreds', 
+      'openswan', 'sysklogd', 'openldap-servers', 'openldap-clients',
+      'setroubleshoot', 'bind', 'vsftpd', 'httpd', 'dovecot', 'samba',
+      'squid', 'net-snmp' ] %}
+      {% if 'keep_' + pkg in pillar and pillar['keep_' + pkg ] %}
+      {% else %}
+      - {{pkg}}
+      {% endif %}
+      {% endfor %}
+
 
 ## 1.1.1 Create Separate Partition for /tmp (Scored)
 ## 1.1.5 Create Separate Partition for /var (Scored)

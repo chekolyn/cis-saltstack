@@ -3,6 +3,12 @@ sysadmin: Your Name
 sysadmin_email: email@example.com
 file_header: "** THIS FILE IS MANAGED BY SALT; CHANGES WILL BE OVERWRITTEN **"
 
+## CIS Package Management:
+## You can avoid removing "cis_removed_pkgs" by creating a keep_pkgname variable here
+## For example:
+##{% if 'webserver' in grains['id'] %}
+##keep_httpd: yes
+##{% endif %}
 
 ## 1.2.2 Verify Red Hat GPG Key is Installed
 redhat_gpg_keys:
