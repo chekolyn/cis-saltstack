@@ -154,6 +154,9 @@ grub_selinux:
     - template: jinja
     
 # Install salt pkg dependency for selinux state:
+policycoreutils:
+  pkg.installed
+
 policycoreutils-python:
   pkg.installed 
   
@@ -163,6 +166,7 @@ cis_selinux:
       - mode
       - name: enforcing
       - require:
+        - pkg: policycoreutils
         - pkg: policycoreutils-python
 
 ## 1.4.4 Remove SETroubleshoot
