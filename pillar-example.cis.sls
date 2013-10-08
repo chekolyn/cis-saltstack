@@ -4,11 +4,43 @@ sysadmin_email: email@example.com
 file_header: "** THIS FILE IS MANAGED BY SALT; CHANGES WILL BE OVERWRITTEN **"
 
 ## CIS Package Management:
-## You can avoid removing "cis_removed_pkgs" by creating a keep_pkgname variable here
-## For example:
-##{% if 'webserver' in grains['id'] %}
-##keep_httpd: yes
-##{% endif %}
+#  These are the default CIS packages to be removed:
+#  You can edit this list accordingly:
+#  WARNING: if this variable doesn't exist in your pillar
+#  all CIS packages marked to be removed will be purged. 
+#  Look at the "default_cis_pkgs_to_remove" variable in the cis.sls
+cis_pkgs_to_remove:
+  - xinetd
+  - telnet
+  - telnet-server
+  - krb5-workstation
+  - rsh-server
+  - rsh
+  - tftp-server
+  - sendmail
+  - dhcp
+  - gnome-user-share
+  - isdn4k-utils
+  - irda-utils
+  - talk
+  - ipsec-tools
+  - pam_ccreds
+  - openswan
+  - sysklogd
+  - openldap-servers
+  - openldap-clients
+  - setroubleshoot
+  - bind
+  - vsftpd
+  - httpd
+  - dovecot
+  - samba
+  - squid
+  - net-snmp
+# You can skip certain pkgs like this:
+# {% if 'webserver' not in grains['id'] %}
+# - httpd
+# {% endif %}
 
 ## 1.2.2 Verify Red Hat GPG Key is Installed
 redhat_gpg_keys:

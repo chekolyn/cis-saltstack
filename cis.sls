@@ -22,21 +22,20 @@ cis_install_pkgs:
       - tcp_wrappers
       - cronie-anacron
 
+## Default CIS packages to remove:
+{% set default_cis_pkgs_to_remove = ['xinetd', 'telnet', 'telnet-server', 'krb5-workstation',
+'rsh-server', 'rsh', 'tftp-server', 'sendmail', 'dhcp', 'gnome-user-share','isdn4k-utils',
+'irda-utils', 'talk', 'ipsec-tools', 'pam_ccreds', 'openswan', 'sysklogd', 'openldap-servers',
+'openldap-clients', 'setroubleshoot', 'bind', 'vsftpd', 'httpd', 'dovecot', 'samba',
+'squid', 'net-snmp' ] %}
+
 cis_removed_pkgs:
   pkg.purged:
     - pkgs:
-      {% for pkg in ['xinetd', 'telnet', 'telnet-server', 'krb5-workstation',
-      'rsh-server', 'rsh', 'tftp-server', 'sendmail', 'dhcp', 'gnome-user-share',
-      'isdn4k-utils', 'irda-utils', 'talk', 'ipsec-tools', 'pam_ccreds', 
-      'openswan', 'sysklogd', 'openldap-servers', 'openldap-clients',
-      'setroubleshoot', 'bind', 'vsftpd', 'httpd', 'dovecot', 'samba',
-      'squid', 'net-snmp' ] %}
-      {% if 'keep_' + pkg in pillar and pillar['keep_' + pkg ] %}
-      {% else %}
+      ## Check for packages in pillar otherwise use default CIS packages:
+      {% for pkg in pillar.get('cis_pkgs_to_remove', default_cis_pkgs_to_remove) %}
       - {{pkg}}
-      {% endif %}
       {% endfor %}
-
 
 ## 1.1.1 Create Separate Partition for /tmp (Scored)
 ## 1.1.5 Create Separate Partition for /var (Scored)
