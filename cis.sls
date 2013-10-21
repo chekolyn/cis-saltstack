@@ -540,7 +540,6 @@ net.ipv4.tcp_syncookies:
 
 ## 4.4 Disable IPv6    
 ## 4.4.1.1 Disable IPv6 Router Advertisements
-
 net.ipv6.conf.all.accept_ra:
   sysctl:
     - present
@@ -567,15 +566,15 @@ net.ipv6.conf.default.accept_redirects:
 net.ipv6.conf.all.disable_ipv6:
   sysctl:
     - present
-    - value: {{ '0' if pillar['enable_ipv6']  else '1' }}
+    - value: {{ '0' if pillar.get('enable_ipv6', false)  else '1' }}
     
 net.ipv6.conf.default.disable_ipv6:
   sysctl:
     - present
-    - value: {{ '0' if pillar['enable_ipv6'] else '1' }}
+    - value: {{ '0' if pillar.get('enable_ipv6', false) else '1' }}
     
 # from CIS
-{% if pillar['enable_ipv6'] %}
+{% if pillar.get('enable_ipv6', false) %}
 ipv6_sysconfig_network_enable:
   file:
     - sed
@@ -592,7 +591,7 @@ ipv6_syconfig_network_disable:
     - text: "NETWORKING_IPV6=no"
 {% endif %}
 
-{% if pillar['enable_ipv6'] %}
+{% if pillar.get('enable_ipv6', false) %}
 ipv6_sysconfig_network_enable2:
   file:
     - sed
