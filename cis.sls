@@ -114,9 +114,9 @@ gpgcheck_sed:
 ## 1.2.4 Disable the rhnsd Daemon
 rhnsd:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_rhnsd', false)  else 'disabled' }}
     - name: rhnsd
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_rhnsd', false)  else 'false' }}
     - sig: rhnsd
     
 ## 1.2.5 Obtain Software Package Updates with yum (Not Implemented)
@@ -438,6 +438,7 @@ ntpd:
 ## Up in package management
 
 ## 3.16 Configure Mail Transfer Agent for Local-Only Mode
+## TODO
 
 #### 4 Network Configuration and Firewalls ####
 ## 4.1.1 Disable IP Forwarding 
