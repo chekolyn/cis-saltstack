@@ -116,7 +116,7 @@ rhnsd:
   service:
     - {{ 'running' if pillar.get('enable_rhnsd', false)  else 'disabled' }}
     - name: rhnsd
-    - enable: {{ 'True' if pillar.get('enable_rhnsd', false)  else 'false' }}
+    - enable: {{ 'True' if pillar.get('enable_rhnsd', false)  else 'False' }}
     - sig: rhnsd
     
 ## 1.2.5 Obtain Software Package Updates with yum (Not Implemented)
@@ -299,57 +299,57 @@ kernel.randomize_va_space:
 ## 2.1.12 Disable chargen-dgram 
 chargen-dgram:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_chargen-dgram', false)  else 'disabled' }}
     - name: chargen-dgram
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_chargen-dgram', false)  else 'False' }}
     - sig: chargen-dgram
 
 ## 2.1.13 Disable chargen-stream endif
 chargen-stream:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_chargen-stream', false)  else 'disabled' }}
     - name: chargen-stream
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_chargen-stream', false)  else 'False' }}
     - sig: chargen-stream
 
 ## 2.1.14 Disable daytime-dgram
 daytime-dgram:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_daytime-dgram', false)  else 'disabled' }}
     - name: daytime-dgram
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_daytime-dgram', false)  else 'False' }}
     - sig: daytime-dgram
 
 ## 2.1.15 Disable daytime-stream
 daytime-stream:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_daytime-stream', false)  else 'disabled' }}
     - name: daytime-stream
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_daytime-stream', false)  else 'False' }}
     - sig: daytime-stream
 
 ## 2.1.16 Disable echo-dgram
 echo-dgram:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_echo-dgram', false)  else 'disabled' }}
     - name: echo-dgram
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_echo-dgram', false)  else 'False' }}
     - sig: echo-dgram  
   
 ## 2.1.17 Disable echo-stream
 echo-stream:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_echo-stream', false)  else 'disabled' }}
     - name: echo-stream
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_echo-stream', false)  else 'False' }}
     - sig: echo-stream
     
 ## 2.1.18 Disable tcpmux-server
 tcpmux-server:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_tcpmux-server', false)  else 'disabled' }}
     - name: tcpmux-server
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_tcpmux-server', false)  else 'False' }}
     - sig: tcpmux-server
     
     
@@ -371,17 +371,17 @@ remove_x_windows:
 ## 3.3 Disable Avahi Server
 avahi-daemon:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_avahi-daemon', false)  else 'disabled' }}
     - name: avahi-daemon
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_avahi-daemon', false)  else 'False' }}
     - sig: avahi-daemon
 
 ## 3.4 Disable Print Server - CUPS
 cups:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_cups', false)  else 'disabled' }}
     - name: cups
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_cups', false)  else 'False' }}
     - sig: cups
     
 ## 3.5 Remove DHCP Server 
@@ -423,9 +423,9 @@ ntpd:
 {% for service in ['nfslock', 'rpcgssd', 'rpcbind', 'rpcidmapd', 'rpcsvcgssd'] %} 
 {{service}}:
   service:
-    - disabled
+    - {{ 'running' if pillar.get('enable_nfs', false)  else 'disabled' }}
     - name: {{service}}
-    - enable: False
+    - enable: {{ 'True' if pillar.get('enable_nfs', false)  else 'False' }}
 {% endfor %}
 
 ## 3.9 Remove DNS Server (bind)
@@ -652,9 +652,9 @@ ipv6_syconfig_network_disable2:
 ## 4.7 Enable IPtables
 iptables:
   service:
-    - running
+    - {{ 'disabled' if pillar.get('disable_iptables', false)  else 'running' }}
     - name: iptables
-    - enable: True
+    - enable: {{ 'False' if pillar.get('disable_iptables', false)  else 'True' }}
     
 ## 4.8 Enable IP6tables 
 ip6tables:
