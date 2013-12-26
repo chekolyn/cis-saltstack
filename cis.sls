@@ -55,7 +55,9 @@ cis_removed_pkgs:
 ('/var/log', 'nodev,noexec,nosuid'), ('/var/log/audit', 'nodev,noexec,nosuid'),
 ('/home', 'nodev'), ('/dev/shm', 'defaults,nodev,noexec,nosuid') ]  %}
 
-# First check if the mount point exist in the fstab file:
+# First check if the mount point exist in the fstab file for {{device}}:
+# note: the are intentional space characters before and after the device name 
+# to prevent grep x`errors.
 {% set partition_exist = salt['cmd.run']("grep -c ' " + device + " ' /etc/fstab") %}
 {% if partition_exist == '1' %}
 #Mount_point_exists= {{partition_exist}}
