@@ -55,22 +55,27 @@ cis_removed_pkgs:
 ('/var/log', 'nodev,noexec,nosuid'), ('/var/log/audit', 'nodev,noexec,nosuid'),
 ('/home', 'nodev'), ('/dev/shm', 'defaults,nodev,noexec,nosuid') ]  %}
 
-{% set dev_grep = salt['cmd.run']("grep ' " + device + " ' /etc/fstab | grep -c '" + fsoptions + "'") %}
-# Current_dev = {{device}}
-# dev_grep= {{dev_grep}}
-{% if dev_grep  == '0' %}
-{% set command_opts = "grep ' " + device + " ' /etc/fstab  | awk '{print $4}'" %}
+# First check if the mount point exist in the fstab file:
+{% set partition_exist = salt['cmd.run']("grep -c ' " + device + " ' /etc/fstab") %}
+{% if partition_exist == '1' %}
+#Mount_point_exists= {{partition_exist}}
+# Get the current mount options
 {% set current_opts = salt['cmd.run']("grep ' " + device + " ' /etc/fstab  | awk '{print $4}'")  %}
-# command_opts = {{command_opts}}
-# current_opts = {{current_opts}}
+#Current_dev = {{device}}
+#Current_opts= {{current_opts}}
+#Salt_fsoptions= {{fsoptions}}
 
-ftab_{{device}}:
+{% if fsoptions  != current_opts %}
+
+fstab_{{ device }}:
   file:
-    - sed
+    - replace
     - name: /etc/fstab
-    - before: '{{current_opts}}'
-    - after: '{{fsoptions}}'
-    - limit: '{{device}}'
+    - pattern: '(\s\{{device}}\s.*)({{current_opts}})'
+    - repl: '\1{{fsoptions}}'
+    - count: 1  
+
+{% endif %}
 {% endif %}
 {% endfor %}
 
