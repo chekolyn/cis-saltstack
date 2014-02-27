@@ -283,11 +283,6 @@ kernel.randomize_va_space:
     - present
     - value: 2
     
-/etc/sysconfig/init:
-  file:
-    - append
-    - text: 'umask 027'
-
 ## 1.7 Use the Latest OS Release (Not Scored)
 ## Not Implemented
 
