@@ -1,14 +1,2 @@
 Welcome to {{ grains['id'] }}!
-
-Managed By
- (                  (                          
- )\ )       (     ) )\ )    )               )  
-(()/(    )  )\ ( /((()/( ( /(    )       ( /(  
- /(_))( /( ((_))\())/(_)))\())( /(   (   )\()) 
-(_))  )(_)) _ (_))/(_)) (_))/ )(_))  )\ ((_)\  
-/ __|((_)_ | || |_ / __|| |_ ((_)_  ((_)| |(_) 
-\__ \/ _` || ||  _|\__ \|  _|/ _` |/ _| | / /  
-|___/\__,_||_| \__||___/ \__|\__,_|\__| |_\_\  
-
-Authorized uses only. All activity may be monitored and reported.
-{{ pillar['motd_msg'] }}
+{{ salt['pillar.get']('motd_msg', '"\n-- WARNING --\nThis system is for the use of authorized users only. Individuals\nusing this computer system without authority or in excess of their\nauthority are subject to having all their activities on this system\nmonitored and recorded by system personnel. Anyone using this\nsystem expressly consents to such monitoring and is advised that\nif such monitoring reveals possible evidence of criminal activity\nsystem personal may provide the evidence of such monitoring to law\nenforcement officials."') }}

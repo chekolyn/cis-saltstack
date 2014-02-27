@@ -85,3 +85,5 @@ enable_ipv6: no
 ## Opening to all local private networks by default
 hosts_allow_subnet: "10.0.0.0/255.0.0.0, 172.16.0.0/255.240.0.0, 192.168.0.0/255.255.0.0"
 
+## Extra options for NTP, default is empty -- this is to use, for example, -g
+ntpd_extraopts: ''

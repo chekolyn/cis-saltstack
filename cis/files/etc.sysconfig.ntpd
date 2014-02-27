@@ -3,4 +3,4 @@
 #    sysadmin: {{ pillar['sysadmin'] }} <{{ pillar['sysadmin_email'] }}>
 #
 # Drop root to id 'ntp:ntp' by default.
-OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid"
+OPTIONS="-u ntp:ntp -p /var/run/ntpd.pid{{ salt['pillar.get']('ntpd_extraopts', '') }}"
