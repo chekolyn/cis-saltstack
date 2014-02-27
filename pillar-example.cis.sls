@@ -43,13 +43,13 @@ cis_pkgs_to_remove:
 # {% endif %}
 
 ## 1.2.2 Verify Red Hat GPG Key is Installed
-redhat_gpg_keys:
+RedHat_gpg_keys:
   RPM-GPG-KEY-redhat-release: "567E 347A D004 4ADE 55BA 8A5F 199E 2F91 FD43 1D51"
   RPM-GPG-KEY-redhat-legacy-release: "47DB 2877 89B2 1722 B6D9 5DDE 5326 8101 3701 7186"
   RPM-GPG-KEY-redhat-legacy-former: "CA20 8686 2BD6 9DFC 65F6 ECC4 2191 80CD DB42 A60E"
   RPM-GPG-KEY-redhat-legacy-rhx: "01AD EFD1 5A95 AE43 14DE 83C2 39A1 3A12 4219 3E6B"
 
-centos_gpg_keys:
+CentOS_gpg_keys:
   RPM-GPG-KEY-CentOS-6: "C1DA C52D 1664 E8A4 386D  BA43 0946 FCA2 C105 B9DE"
 
 epel_gpg_keys:
