@@ -170,7 +170,7 @@ policycoreutils-python:
 cis_selinux:
     selinux:
       - mode
-      - name: enforcing
+      - name: {{ salt['pillar.get']('selinux_state', 'enforcing') }}
       - require:
         - pkg: policycoreutils
         - pkg: policycoreutils-python
