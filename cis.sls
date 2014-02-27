@@ -865,10 +865,13 @@ crond:
     - absent
 
 /etc/cron.allow:
-  file.directory:
-    - mode: 0700
+  file:
+    - managed
+    - source: salt://cis/files/etc.cron.allow
+    - mode: 0600
     - user: root
     - group: root
+    - template: jinja
 
 #### 6.2 Configure SSH
 ## 6.2.1 Set SSH Protocol to 2 (Scored)
