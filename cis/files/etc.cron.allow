@@ -1,0 +1,10 @@
+#    {{ pillar['file_header'] }}
+#    Company: {{ pillar['company'] }}
+#    sysadmin: {{ pillar['sysadmin'] }} <{{ pillar['sysadmin_email'] }}>
+#
+# cron.allow	Contains a list of users, one per line, that are allowed
+# 	to submit cron tasks.
+#
+## CIS 6.1.11 Create /etc/cron.allow
+root
+{{ salt['pillar.get']('cron_users', '') }}
