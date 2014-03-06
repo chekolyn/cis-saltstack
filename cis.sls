@@ -108,7 +108,7 @@ gpg_check:
     - required:
          -file: /opt/cis/scripts/1.2.2.gpg-keys.sh
     - watch:
-      - file.recourse: /opt/cis/scripts     
+      - file: /opt/cis/scripts     
         
 ## 1.2.3 Verify that gpgcheck is Globally Activated
 gpgcheck_sed:
@@ -188,7 +188,7 @@ unconfied_daemon_check:
     - required:
          -file: /opt/cis/scripts/1.4.6.check.for.unconfined.daemons.sh
     - watch:
-      - file.recourse: /opt/cis/scripts  
+      - file: /opt/cis/scripts  
 
 ## 1.5.1 Set User/Group Owner on /etc/grub.conf
 ## 1.5.2 Set Permissions on /etc/grub.conf
@@ -920,7 +920,7 @@ pam_hash_test:
     - required:
          -file: /opt/cis/scripts/6.3.1.all.pam.password.hashing.sh
     - watch:
-      - file.recourse: /opt/cis/scripts         
+      - file: /opt/cis/scripts         
 
 ## 6.3.2 Set Password Creation Requirement Parameters Using pam_cracklib (Scored)
 ## 6.3.3 Set Strong Password Creation Policy Using pam_passwdqc (Scored)
@@ -992,7 +992,7 @@ system_accounts_test:
     - required:
          -file: /opt/cis/scripts/7.2.disable.system.accounts.sh
     - watch:
-      - file.recourse: /opt/cis/scripts
+      - file: /opt/cis/scripts
 
 ## 7.3 Set Default Group for root Account (Scored)
 root_primary_group_test:  
@@ -1003,7 +1003,7 @@ root_primary_group_test:
     - required:
          -file: /opt/cis/scripts/7.3.default.group.for.root.account.sh
     - watch:
-      - file.recourse: /opt/cis/scripts
+      - file: /opt/cis/scripts
                
 ## 7.4 Set Default umask for Users (Scored)
 umask_bashrc_sed:
@@ -1082,7 +1082,7 @@ word_writable_files:
     - required:
          -file: /opt/cis/scripts/9.1.10.find.world.writable.files.sh
     - watch:
-      - file.recourse: /opt/cis/scripts
+      - file: /opt/cis/scripts
                
 ## 9.1.11 Find Un-owned Files and Directories (Scored)
 unowned_files:  
@@ -1093,7 +1093,7 @@ unowned_files:
     - required:
          -file: /opt/cis/scripts/9.1.11.find.unowned.files.and.directories.sh             
     - watch:
-      - file.recourse: /opt/cis/scripts
+      - file: /opt/cis/scripts
       
 ## 9.1.12 Find Un-grouped Files and Directories (Scored)
 ungroup_files:  
@@ -1102,9 +1102,9 @@ ungroup_files:
     - cwd: /
     - stateful: True
     - required:
-         -file: /opt/cis/scripts/9.1.12.find.ungrouped.files.and.directories.sh
+         - file: /opt/cis/scripts/9.1.12.find.ungrouped.files.and.directories.sh
     - watch:
-      - file.recourse: /opt/cis/scripts
+      - file: /opt/cis/scripts
                
 ## 9.1.13 Find SUID System Executables (Not Scored)
 ## 9.1.14 Find SGID System Executables (Not Scored)
